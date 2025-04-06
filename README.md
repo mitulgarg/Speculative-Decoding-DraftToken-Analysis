@@ -31,7 +31,7 @@ Three metrics are plotted against the number of draft tokens:
 2. **Cosine Similarity** – Semantic similarity vs baseline (no draft).
 3. **ROUGE-L** – Overlap-based quality score vs baseline.
 
-![alt text](image.png)
+![alt text](assets/image.png)
 
 ## ⚙️ Requirements
 

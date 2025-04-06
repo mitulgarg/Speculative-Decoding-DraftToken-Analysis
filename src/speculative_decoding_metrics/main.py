@@ -1,6 +1,6 @@
 import argparse
-from evaluator import SpeculativeDecoderEvaluator
-from plotter import ResultPlotter
+from speculative_decoding_metrics.evaluator import SpeculativeDecoderEvaluator
+from speculative_decoding_metrics.plotter import ResultPlotter
 
 def main():
     parser = argparse.ArgumentParser(description="Run speculative decoding analysis.")
