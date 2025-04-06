@@ -13,11 +13,12 @@ authors = [
   { name="Mitul Garg", email="mitulgarg3@gmail.com" }
 ]
 dependencies = [
-  "mlx_lm",
-  "sentence-transformers",
-  "rouge-score",
-  "matplotlib",
-  "numpy"
+  "mlx_lm==0.22.3",
+  "sentence-transformers==2.2.2",
+  "rouge-score==0.1.2",
+  "matplotlib==3.10.1",
+  "numpy",
+  "transformers==4.48.0"
 ]
 
 [project.urls]
