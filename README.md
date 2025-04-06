@@ -2,11 +2,15 @@
 
 This project analyzes the performance and quality trade-offs in **speculative decoding** using draft tokens with different model configurations. It compares output speed, semantic similarity, and ROUGE-L scores across varying numbers of draft tokens.
 
-## Run main analysis script 
+## Run main analysis script (Runs default phi-3-mini-4k-instruct model)
 ```bash
 python main.py
 ```
+## You can also specify your preferred model using --model and --prompt
+```bash
+python main.py --model phi-3-mini-4k-instruct --prompt "What are the benefits of AI in education?"
 
+```
 ## 📌 Overview
 
 Speculative decoding is a technique to accelerate language generation by proposing draft tokens before validating them with a larger model. This repo evaluates:

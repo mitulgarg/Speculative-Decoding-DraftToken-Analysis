@@ -8,9 +8,10 @@ from rouge_score import rouge_scorer
 from sentence_transformers import SentenceTransformer
 
 class SpeculativeDecoderEvaluator:
-    def __init__(self, base_model="phi-3-mini-4k-instruct", max_tokens=64):
+    def __init__(self, base_model="phi-3-mini-4k-instruct", max_tokens=64, prompt_text="Write a story about Einstein."):
         os.environ["METAL_DEVICE_WRAPPER_TYPE"] = "1"
         self.max_tokens = max_tokens
+        self.prompt_text = prompt_text
 
         # Model paths
         self.main_model_path = f"mlx-community/{base_model}-8bit"
@@ -21,11 +22,11 @@ class SpeculativeDecoderEvaluator:
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
         self.rouge = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
 
-        self.prompt_text = "Write a story about Einstein."
         self.messages = [{"role": "user", "content": self.prompt_text}]
         self.prompt = self.tokenizer.apply_chat_template(self.messages, add_generation_prompt=True)
 
         self.main_model, _ = mlx_lm.load(self.main_model_path)
+
 
     def embed(self, text):
         return np.array(self.embedding_model.encode([text])[0], dtype=np.float32)
@@ -71,7 +72,7 @@ class SpeculativeDecoderEvaluator:
                 rouge_l = rouge['rougeL'].fmeasure
 
             results.append((tokens_per_sec, similarity, rouge_l))
-            print(f"    ⏱️ {tokens_per_sec:.2f} tokens/sec | 🧠 Cosine: {similarity:.2%} | 📝 ROUGE-L: {rouge_l:.2%}")
+            print(f" Time : {tokens_per_sec:.2f} tokens/sec | Cosine similarity : {similarity:.2%} | ROUGE-L: {rouge_l:.2%}")
 
             if draft_model is not None:
                 del draft_model
