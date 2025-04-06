@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "speculative_decoding_metrics"
-version = "0.1.3"
+version = "0.1.4"
 description = "A package that evaluates and plots results to test Throughput based on number of draft tokens"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -13,8 +13,8 @@ authors = [
   { name="Mitul Garg", email="mitulgarg3@gmail.com" }
 ]
 dependencies = [
-  "huggingface-hub==0.30.1",
   "sentence-transformers==3.3.1",
+  "huggingface-hub==0.30.1",
   "rouge-score==0.1.2",
   "matplotlib==3.10.1",
   "numpy==2.2.4",
