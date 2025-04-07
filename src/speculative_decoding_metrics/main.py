@@ -7,6 +7,7 @@ def run_evaluation(
     main_quant="8bit",
     draft_quant="4bit",
     num_draft_tokens_list=None,
+    max_tokens=32,
     plot=True,
 ):
     if num_draft_tokens_list is None:

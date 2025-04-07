@@ -22,9 +22,11 @@ run_evaluation(
     base_model="phi-3-mini-4k-instruct",  #Use a model that'll run on your local
     main_quant="8bit",          #use q8 instead of "8bit" based on HuggingFace Repo name 
     draft_quant="4bit",         #use q4 instead of "4bit" based on HuggingFace Repo name
-    prompt="Tell me a bedtime story",
+    prompt="How do LLMs work?",
+    max_tokens=64,              #Tweak max tokens per output
     num_draft_tokens_list=[0, 1, 2, 3, 4]
 )
+
 
 ```
 ## ▶️ Run the Demo
@@ -53,7 +55,7 @@ This package generates plots comparing output quality and speed across draft tok
 2. **Cosine Similarity** – Semantic match with baseline (no draft)  
 3. **ROUGE-L** – Text overlap quality score  
 
-![Results Graph](assets/image.png)
+![Results Graph](https://raw.githubusercontent.com/mitulgarg/Speculative-Decoding-DraftToken-Analysis/main/assets/image.png)
 
 ---
 
@@ -61,7 +63,8 @@ This package generates plots comparing output quality and speed across draft tok
 
 - 🔧 **Change the prompt** – Modify the `prompt` in `demo/run_example.py`  
 - 🧠 **Try other models** – Swap the `base_model` string (e.g., Mistral, TinyLlama)  
-- 🎛️ **Adjust draft token range** – Modify `num_draft_tokens_list` for finer control  
+- 🎛️ **Adjust draft token range** – Modify `num_draft_tokens_list` for finer control 
+- 📏 **Set max output length** – Use `max_tokens` to limit generation length   
 
 ---
 
