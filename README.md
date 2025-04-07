@@ -1,70 +1,72 @@
 # Speculative-Decoding-DraftToken-Analysis
+#MLX #AppleSilicon #SpeculativeDecoding 
+This project analyzes the **performance and quality trade-offs** in speculative decoding using draft tokens and different quantized model configurations. It evaluates:
 
-This project analyzes the performance and quality trade-offs in **speculative decoding** using draft tokens with different model configurations. It compares output speed, semantic similarity, and ROUGE-L scores across varying numbers of draft tokens.
-
-## If you've installed using pip,, Run main analysis script (Runs default phi-3-mini-4k-instruct model)
+- ⚡ **Generation speed** (tokens/sec)  
+- 🔍 **Semantic similarity (Accuracy metric)** (cosine similarity via sentence embeddings)  
+- 📝 **Text quality (Accuracy metric)** (ROUGE-L score)  
+ 
+---
+### ▶️ Install the pip package
 ```bash
-python -m speculative_decoding_metrics.main
+pip install speculative-decoding-metrics
 ```
-## If you've installed using pip, You can also specify your preferred model using --model and --prompt
+---
+### Customize the Speculative decoding analysis
+###### After installing the package, create a demo script with a default prompt and model: 
+demo/run_example.py
+```
+from speculative_decoding_metrics.main import run_evaluation
+
+run_evaluation(
+    base_model="phi-3-mini-4k-instruct",  #Use a model that'll run on your local
+    main_quant="8bit",          #use q8 instead of "8bit" based on HuggingFace Repo name 
+    draft_quant="4bit",         #use q4 instead of "4bit" based on HuggingFace Repo name
+    prompt="Tell me a bedtime story",
+    num_draft_tokens_list=[0, 1, 2, 3, 4]
+)
+
+```
+## ▶️ Run the Demo
 ```bash
-python -m speculative_decoding_metrics.main --model phi-3-mini-4k-instruct --prompt "What are the benefits of AI in education?"
+python demo/run_example.py
 ```
 
-## 📌 Overview
+---
 
-Speculative decoding is a technique to accelerate language generation by proposing draft tokens before validating them with a larger model. This repo evaluates:
+## 📌 What Is Speculative Decoding?
 
-- **Throughput** (tokens/sec)
-- **Semantic similarity** (cosine similarity via sentence embeddings)
-- **Text quality** (ROUGE-L score)
+**Speculative decoding** speeds up language generation by using a smaller "draft" model to propose tokens, which are then verified by a larger "main" model.
 
-All experiments are run using:
-- **Main model**: 8-bit quantized (`mlx-community/<model>-8bit`)
-- **Draft model**: 4-bit quantized (`mlx-community/<model>-4bit`)
+This repo benchmarks speculative decoding using:
+
+- **Main model**: Quantized to `8bit` → `mlx-community/<model>-8bit`
+- **Draft model**: Quantized to `4bit` → `mlx-community/<model>-4bit`
+
+---
 
 ## 📊 Visualized Metrics
+Based on these results, the user can decide which speculative decoding they want to run for the best results!
+This package generates plots comparing output quality and speed across draft token counts:
 
-Three metrics are plotted against the number of draft tokens:
+1. **Tokens/sec** – Speed boost with draft tokens  
+2. **Cosine Similarity** – Semantic match with baseline (no draft)  
+3. **ROUGE-L** – Text overlap quality score  
 
-1. **Tokens per second** – Measures generation speed.
-2. **Cosine Similarity** – Semantic similarity vs baseline (no draft).
-3. **ROUGE-L** – Overlap-based quality score vs baseline.
+![Results Graph](assets/image.png)
 
-![alt text](assets/image.png)
+---
 
-## ⚙️ Requirements
+## 🛠 Customization Tips
 
-- Python 3.8+
-- MLX + `mlx_lm`
-- SentenceTransformers
-- rouge_score
-- Matplotlib
-- NumPy
+- 🔧 **Change the prompt** – Modify the `prompt` in `demo/run_example.py`  
+- 🧠 **Try other models** – Swap the `base_model` string (e.g., Mistral, TinyLlama)  
+- 🎛️ **Adjust draft token range** – Modify `num_draft_tokens_list` for finer control  
 
-## Install dependencies using pip 
+---
 
-```bash 
-pip install mlx_lm sentence-transformers rouge-score matplotlib numpy
-```
+## Acknowledgments
 
-
-## ⚙️ Customization
-
-Tailor the analysis to your specific needs:
-
-- **Prompt Modification**: Adjust the input prompt within `evaluator.py` by changing the `self.prompt_text` variable.
-- **Model Selection**: Experiment with different MLX-compatible models by modifying the model names in the scripts.
-- **Draft Token Range**: Alter the range of draft tokens explored in `main.py`.
-
-## 🖼️ Example Output
-
-The script will generate plots showcasing the trade-offs between generation speed and output quality as a function of the number of draft tokens used. These visualizations provide insights into the optimal number of draft tokens for different use cases.
-
-## 🙏 Acknowledgments
-
-This work leverages the following open-source projects:
-
-- **MLX**: Developed by Apple.
-- **HuggingFace Transformers & SentenceTransformers**: Provided by Hugging Face.
-- **ROUGE Scoring**: Developed by Google Research.
+- **Apple MLX** – Lightweight ML framework  
+- **HuggingFace** – Transformers + SentenceTransformers 
+- **Google Research** – ROUGE scoring tools  

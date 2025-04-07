@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "speculative_decoding_metrics"
-version = "0.1.4"
+version = "0.1.5"
 description = "A package that evaluates and plots results to test Throughput based on number of draft tokens"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 license = { file = "LICENSE" }
 authors = [
   { name="Mitul Garg", email="mitulgarg3@gmail.com" }

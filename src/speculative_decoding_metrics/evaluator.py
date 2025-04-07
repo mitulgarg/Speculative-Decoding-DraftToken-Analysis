@@ -8,24 +8,35 @@ from rouge_score import rouge_scorer
 from sentence_transformers import SentenceTransformer
 
 class SpeculativeDecoderEvaluator:
-    def __init__(self, base_model="phi-3-mini-4k-instruct", max_tokens=64, prompt_text="Write a story about Einstein."):
+    def __init__(
+        self,
+        base_model="phi-3-mini-4k-instruct",
+        main_quant="8bit",
+        draft_quant="4bit",
+        max_tokens=32,
+        prompt_text="Write a story about Einstein."
+    ):
         os.environ["METAL_DEVICE_WRAPPER_TYPE"] = "1"
         self.max_tokens = max_tokens
         self.prompt_text = prompt_text
 
-        # Model paths
-        self.main_model_path = f"mlx-community/{base_model}-8bit"
-        self.draft_model_path = f"mlx-community/{base_model}-4bit"
+        self.main_model_path = f"mlx-community/{base_model}-{main_quant}"
+        self.draft_model_path = f"mlx-community/{base_model}-{draft_quant}"
 
-        # Tokenizer and prompt setup
-        _, self.tokenizer = mlx_lm.load(self.draft_model_path)
-        self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        self.rouge = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
+        try:
+            # Tokenizer + Embedding
+            _, self.tokenizer = mlx_lm.load(self.draft_model_path)
+            self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+            self.rouge = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
 
-        self.messages = [{"role": "user", "content": self.prompt_text}]
-        self.prompt = self.tokenizer.apply_chat_template(self.messages, add_generation_prompt=True)
+            self.messages = [{"role": "user", "content": self.prompt_text}]
+            self.prompt = self.tokenizer.apply_chat_template(self.messages, add_generation_prompt=True)
 
-        self.main_model, _ = mlx_lm.load(self.main_model_path)
+            self.main_model, _ = mlx_lm.load(self.main_model_path)
+
+        except Exception as e:
+            raise RuntimeError(f"⚠️ Could not load required models. Reason: {e}\nMake sure your machine has enough resources and the model names are valid.")
+
 
 
     def embed(self, text):
